@@ -1,3 +1,14 @@
+# Save command history
+setopt EXTENDED_HISTORY
+# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+setopt HIST_IGNORE_ALL_DUPS
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
+HISTORY_IGNORE="(ls|cd|pwd|exit|cd ..|history)"
+HISTSIZE=99999
+HISTFILESIZE=999999
+SAVEHIST=$HISTSIZE
+HIST_STAMPS="%d/%m/%y %T"
+
 
 # zsh-autosuggestions 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
