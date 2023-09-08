@@ -33,11 +33,24 @@ compinit
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #Make sure zsh-git-prompt is loaded from your .zshrc:
+: '原本的precmd
 source "/opt/homebrew/opt/zsh-git-prompt/zshrc.sh"
 function precmd {
     PROMPT="%{$fg[green]%}%c $(git_super_status)%{$fg[red]%}~%{$fg[white]%}࿔ %{$reset_color%}"
 }
+'
 
+#20230908
+function precmd() {
+  local git_branch
+  git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+  if [ -n "$git_branch" ]; then
+    PROMPT="%{$fg[green]%}%c %{$fg[white]%}($git_branch)%{$reset_color%} %{$fg[red]%}~%{$fg[white]%}$"
+  else
+    PROMPT="%{$fg[green]%}%c %{$reset_color%}% %{$fg[red]%}~%{$fg[white]%}$"
+  fi
+}
 
 #ruby is keg-only, which means it was not symlinked into /opt/homebrew,
 #because macOS already provides this software and installing another version in
