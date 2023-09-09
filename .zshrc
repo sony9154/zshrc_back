@@ -33,24 +33,29 @@ compinit
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 #Make sure zsh-git-prompt is loaded from your .zshrc:
-: '原本的precmd
 source "/opt/homebrew/opt/zsh-git-prompt/zshrc.sh"
+
+#20230909
 function precmd {
-    PROMPT="%{$fg[green]%}%c $(git_super_status)%{$fg[red]%}~%{$fg[white]%}࿔ %{$reset_color%}"
+    local git_branch=""
+    # 檢查當前目錄是否位於Git工作樹內
+    if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+	# 如果在Git工作樹內，獲取並顯示當前Git分支的名稱
+        # 並將分支名稱的顏色設置為白色
+        git_branch="%F{white} ($(git symbolic-ref --short HEAD 2>/dev/null))%f"
+    fi
+    
+    local current_dir="${PWD##*/}"  # 獲取當前目錄名稱
+    local parent_dir="${PWD%/*}"    # 獲取當前目錄的父目錄路徑
+    parent_dir="${parent_dir##*/}"  # 獲取當前目錄的父目錄名稱
+    local grandparent_dir="${PWD%/*/*}"
+    grandparent_dir="${grandparent_dir##*/}"  # 獲取當前目錄的父目錄的父目錄名稱
+    
+    PROMPT="%{$fg[green]%}$grandparent_dir/$parent_dir/$current_dir$git_branch%{$fg[red]%}~%{$fg[white]%}࿔ %{$reset_color%}"
 }
-'
 
-#20230908
-function precmd() {
-  local git_branch
-  git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
-  if [ -n "$git_branch" ]; then
-    PROMPT="%{$fg[green]%}%c %{$fg[white]%}($git_branch)%{$reset_color%} %{$fg[red]%}~%{$fg[white]%}$"
-  else
-    PROMPT="%{$fg[green]%}%c %{$reset_color%}% %{$fg[red]%}~%{$fg[white]%}$"
-  fi
-}
+
 
 #ruby is keg-only, which means it was not symlinked into /opt/homebrew,
 #because macOS already provides this software and installing another version in
