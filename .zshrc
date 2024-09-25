@@ -11,7 +11,9 @@ HIST_STAMPS="%d/%m/%y %T"
 
 
 # zsh-autosuggestions 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+#source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# 修正找不到zsh-autosuggestions的問題
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # zsh-completions
 if type brew &>/dev/null; then
